@@ -1,7 +1,10 @@
 # flask server for processing px4 log files and returning them on webserver
 from flask import Flask
 from flask import request
+from flask import send_file
 from sdlog2_dump import SDLog2Parser
+import StringIO
+
 
 app = Flask("log muncher")
 
@@ -35,6 +38,10 @@ def process_log():
     csv_text = ""
     with open(log_filename, "r") as f:
         csv_text = f.read()
-    return csv_text.encode("utf-8")
+    sio = StringIO.StringIO()
+    sio.write(csv_text)
+    sio.seek(0)
+    return send_file(sio, attachment_filename="yo_file_dawg", as_attachment=True)
+
 
 app.run("0.0.0.0", port=80, debug=True)
