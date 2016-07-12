@@ -4,7 +4,16 @@ Created on Thu Jun 02 13:26:02 2016
 
 @author: Ramos
 
-This script opens a log file and then displays data according to your settings.
+Get data from log file, narrow it down, calculate stuff and plot as a function of time in seconds
+
+Also writes recorded data to text file for processing in presentdata.py
+
+
+LANDING considered during final
+CLIMB considered immediately after liftoff
+CRUISE considered constant altitude flight
+SAMPLE TIME is 50 seconds
+
 
 """
 #### Import everything
@@ -38,7 +47,8 @@ timerange = 1 # Records a set time range
 fpath = 'C:\Users\CR\Cloud Cap\Piccolo Command Center 2.1.4\Telemetry' 
 
 #### Log file name
-fname = 'goodsim.log'
+fsname = 'goodsim'
+fname = fsname + '.log'
 
 #### Log location
 df = os.path.join(fpath,fname)
@@ -57,8 +67,8 @@ apmodes = ['0 - Prelaunch', '1 - Transition', '2 - Liftoff', '3 - Climbout',
 
 #### autotime detect settings
 automode = 2     # Refer to apmodes list. This mode triggers the recorder 
-rectime  = 700   # Time to record (seconds)
-toffset  = 0    # Time of offset recording (Used for fine tuning data)
+rectime  = 500  # Time to record (seconds)
+toffset  = -10    # Time of offset recording (Used for fine tuning data)
 
 #### findapmode settings
 findmode1 = 0
@@ -66,8 +76,8 @@ findmode2 = 1
 
 #### timerange settings
 if timerange:
-    start = 365 # Time(s) to start recording
-    end =   750 # Time(s) to end recording
+    start = 63 # Time(s) to start recording
+    end =   113 # Time(s) to end recording
 
 ####
 ## Retrieve the data (these lists have the full data)
@@ -345,6 +355,14 @@ pa = avgtas * avgthr
 pu = avgvz  * weight
 p  = np.sqrt(pa**2 - pu**2)
 print p
+
+txtname = '%s log.log' % fsname
+text_file = open(txtname,'w')
+text_file.write('index\talt\trpm\ttas\n')
+for i in range(len(time)):
+    string = '%i\t%f\t%i\t%f\n' % (i,alt[i],rpm[i],tas[i])
+    text_file.write(string)
+text_file.close()   
   
     
     
