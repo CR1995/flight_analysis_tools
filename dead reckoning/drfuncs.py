@@ -107,22 +107,26 @@ def acc_filter(a,threshold):
         a = 0
     return a    
 
-def acc_to_vel(ax,ay,az,vx0,vy0,vz0,dt):
+def timestep(time):
+    '''
+     timestep(): generates a timestep given a list of times from the log
+    '''
+    
+    timestep = (time[-1]- time[0]) / len(time)
+
+    return timestep
+
+def acc_to_vel(ax,ay,az,vx0,vy0,vz0,dt,threshold):
     '''
      acc_to_vel(): takes in three lists of accelerations plus a constant timestep 
      and returns three lists of velocities. 
     '''
-    
-    ## The threshold for acceleration filtering.
-    threshold = .5
     
     vx = [vx0 for i in range(len(ax) + 1)]
     vy = [vy0 for i in range(len(ay) + 1)]
     vz = [vz0 for i in range(len(az) + 1)]  
 
     for i in range(1,len(ax)):
-        
-        acc_filter(ax[i], threshold)
         
         vx[i] = vx[i-1] + ax[i]*dt
         vy[i] = vy[i-1] + ay[i]*dt
@@ -145,5 +149,26 @@ def vel_magnitude(vn,ve,vd):
         val = vn[i]**2 + ve[i]**2 + vd[i]**2
         v.append(np.sqrt(val))
     return v        
+
+def generate_true_acc(vy,vx,vz,dt):
+    '''
+     generate_true_acc(): estimates the true inertial accelerations from the NED
+     velocities reported by the Piccolo
+    '''    
+    ax = [i for i in range(len(vx))]
+    ay = [i for i in range(len(vx))]
+    az = [i for i in range(len(vx))]
     
+    for i in range(len(vx)-1):
+        ax[i] = (vx[i+1] - vx[i]) / dt
+        ay[i] = (vy[i+1] - vy[i]) / dt
+        az[i] = (vz[i+1] - vz[i]) / dt
+    
+    ax[-1] = ax[-2]
+    ay[-1] = ay[-2]
+    az[-1] = az[-2]    
+    
+    return ay, ax, az
+        
+            
     
