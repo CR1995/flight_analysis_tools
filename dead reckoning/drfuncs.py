@@ -52,14 +52,11 @@ def pull_ned_vel(log):
 def acc_body_to_inertial(roll,pitch,yaw,xaccel,yaccel,zaccel):    
     '''
      acc_body_to_inertial(): takes body accelerations reported by the Piccolo (after 
-     being pushed to list form) and converts them to accelerations in the inertial 
+     being pushed to list form) and converts them to accelerations in the geodetic 
      reference frame. 
     
-     Returns 3 values (or normal python lists, if given lists) for the x, y, and 
+     Returns 3 values (or 3 normal python lists, if given lists) for the x, y, and 
      z accelerations in the inertial reference frame.
-    
-     The logic here is to break down the accelerations into their different components 
-     in the desired directions.
     
     '''    
     ax_x = np.cos(pitch)*np.cos(yaw)
