@@ -68,7 +68,7 @@ order = 3
 '''
 ## We are actually going to estimate a timestamp here. Divide the total time 
 ## recorded by the number of entries to estimate a timestep. 
-timestep = (time[-1]- time[0]) / len(time)
+timestep = dr.timestep(time)
 
 ## Convert the accelerations into velocities. The NED velocities are the initial conditions.
 [vx,vy,vz] = dr.acc_to_vel(ax,ay,az, veast[0], vnorth[0], vdown[0], timestep)
