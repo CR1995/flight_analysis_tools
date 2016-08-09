@@ -85,7 +85,7 @@ def acc_bias_offset(ax,ay,az):
      be equal.
      
     ''' 
-    xoffset = np.mean(ax)
+    xoffset = np.mean(ax) + .075
     yoffset = np.mean(ay)
     zoffset = np.mean(az)
     
@@ -123,9 +123,9 @@ def acc_to_vel(ax,ay,az,vx0,vy0,vz0,dt,threshold):
     vy = [vy0 for i in range(len(ay) + 1)]
     vz = [vz0 for i in range(len(az) + 1)]  
 
-    for i in range(1,len(ax)):
+    for i in range(1,len(ax)-1):
         
-        vx[i] = vx[i-1] + ax[i]*dt
+        vx[i] = vx[i-1] + .5*dt*(ax[i] - ax[i-1])
         vy[i] = vy[i-1] + ay[i]*dt
         vz[i] = vz[i-1] + az[i]*dt
         

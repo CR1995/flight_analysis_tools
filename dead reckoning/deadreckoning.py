@@ -52,7 +52,7 @@ timestep = dr.timestep(time)
 ## Filter with a filter I found on the internet
 smoother = 111
 order = 4
-[xaccel, yaccel, zaccel, yaw, pitch, roll] = lt.smooth([xaccel,yaccel,zaccel,yaw,pitch,roll],smoother,order)
+#[xaccel, yaccel, zaccel, yaw, pitch, roll] = lt.smooth([xaccel,yaccel,zaccel,yaw,pitch,roll],smoother,order)
 
 smoother = 111
 order = 3
