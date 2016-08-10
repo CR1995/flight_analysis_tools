@@ -38,6 +38,7 @@ elif land: log = lt.isolate_ap_modes(log,[8,9,10])
 
 ## Extract what we need from the pandas table into lists
 [time,p,q,r,xaccel,yaccel,zaccel,roll,pitch,yaw,maghdg] = dr.pull_att_data(log) 
+zaccel = [i + 9.8065 for i in zaccel]
 
 ## We are going to estimate a timestamp here. Divide the total time 
 ## recorded by the number of entries to estimate a timestep. 
@@ -56,7 +57,7 @@ order = 4
 
 smoother = 111
 order = 3
-[tay, tax, taz] = lt.smooth([tay, tax, taz], smoother, order)
+#[tay, tax, taz] = lt.smooth([tay, tax, taz], smoother, order)
 
 '''
  Use the pulled data to generate a list of estimated accelerations in the inertial x, y, and z
@@ -69,24 +70,21 @@ order = 3
 [ax,ay,az] = dr.acc_body_to_inertial(roll,pitch,yaw,xaccel,yaccel,zaccel)
 
 ## Use an offset to try and remove some bias from the recorded values.
-[ax,ay,az] = dr.acc_bias_offset(ax,ay,az) 
+#[ax,ay,az] = dr.acc_bias_offset(ax,ay,az) 
 
 '''
  Generate a list of velocities in each axis using the accelerations, and a known(?) timestep
 
 '''
-
-#for i in range(len(ax)):
-#    ax[i] = dr.acc_filter(ax[i], .01)
-#    ay[i] = dr.acc_filter(ay[i], .01)
-#    az[i] = dr.acc_filter(az[i], .01)
+threshold = .1
+[ax, ay, az] = dr.acc_filter(ax, ay, az, threshold)
 
 ## Convert the accelerations into velocities. The NED velocities are the initial conditions.
-[vx,vy,vz] = dr.acc_to_vel(ax,ay,az, veast[0], vnorth[0], vdown[0], timestep, 0)
+[vx, vy, vz] = dr.acc_to_vel_midpoint(ax, ay, az, veast[0], vnorth[0], vdown[0], timestep, 0)
 
 ## Convert the directional velocities into velocity magnitudes
-dr_vel = dr.vel_magnitude(vy,vx,vz)
-true_vel = dr.vel_magnitude(vnorth,veast,vdown)
+dr_vel = dr.magnitude(vy,vx,vz)[:-10]
+true_vel = dr.magnitude(vnorth,veast,vdown)[:-10]
 
 
  

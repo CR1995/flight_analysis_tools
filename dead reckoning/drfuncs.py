@@ -85,7 +85,7 @@ def acc_bias_offset(ax,ay,az):
      be equal.
      
     ''' 
-    xoffset = np.mean(ax) + .075
+    xoffset = np.mean(ax) 
     yoffset = np.mean(ay)
     zoffset = np.mean(az)
     
@@ -94,15 +94,28 @@ def acc_bias_offset(ax,ay,az):
     az = [i - zoffset for i in az]
     return ax,ay,az
 
-def acc_filter(a,threshold):
+def acc_filter_low_values(a,threshold):
     '''
-     acc_filter(): sets accelerations below a certain threshold to 0 to avoid
-     changes in velocity when accelerations are very low.
+     acc_filter_low_values(): sets accelerations below a certain threshold to 0 to avoid
+     changes in velocity when accelerations are very low. Kind of like a high pass
+     filter.
      
     '''
     if np.abs(a) < threshold:
         a = 0
     return a    
+
+def acc_filter(ax,ay,az,threshold):
+    '''
+     acc_filter(): uses the acc_filter_low_values() function in a cleaner package
+    
+    '''
+    for i in range(len(ax)):
+        ax[i] = acc_filter_low_values(ax[i], threshold)
+        ay[i] = acc_filter_low_values(ay[i], threshold)
+        az[i] = acc_filter_low_values(az[i], threshold)
+        
+    return ax, ay, az    
 
 def timestep(time):
     '''
@@ -113,10 +126,10 @@ def timestep(time):
 
     return timestep
 
-def acc_to_vel(ax,ay,az,vx0,vy0,vz0,dt,threshold):
+def acc_to_vel_linear(ax,ay,az,vx0,vy0,vz0,dt,threshold):
     '''
-     acc_to_vel(): takes in three lists of accelerations plus a constant timestep 
-     and returns three lists of velocities. 
+     acc_to_vel_linear(): takes in three lists of accelerations plus a constant timestep 
+     and returns three lists of velocities. Uses a simple linear integration scheme.
     '''
     
     vx = [vx0 for i in range(len(ax) + 1)]
@@ -124,8 +137,7 @@ def acc_to_vel(ax,ay,az,vx0,vy0,vz0,dt,threshold):
     vz = [vz0 for i in range(len(az) + 1)]  
 
     for i in range(1,len(ax)-1):
-        
-        vx[i] = vx[i-1] + .5*dt*(ax[i] - ax[i-1])
+        vx[i] = vx[i-1] + ax[i]*dt
         vy[i] = vy[i-1] + ay[i]*dt
         vz[i] = vz[i-1] + az[i]*dt
         
@@ -135,17 +147,39 @@ def acc_to_vel(ax,ay,az,vx0,vy0,vz0,dt,threshold):
     
     return vx,vy,vz
 
-def vel_magnitude(vn,ve,vd):
+def acc_to_vel_midpoint(ax,ay,az,vx0,vy0,vz0,dt,threshold):
     '''
-     vel_magnitude(): generates a velocity magnitude for a given set of directional
-     velocities.
+     acc_to_vel_midpoint(): takes in three lists of accelerations plus a constant timestep 
+     and returns three lists of velocities. Uses a midpoint integration scheme.
+    '''
+    
+    vx = [vx0 for i in range(len(ax) + 1)]
+    vy = [vy0 for i in range(len(ay) + 1)]
+    vz = [vz0 for i in range(len(az) + 1)]  
+
+    for i in range(1,len(ax)-1):
+        vx[i] = vx[i-1] + .5*(ax[i-1]+ax[i+1])*dt
+        vy[i] = vy[i-1] + .5*(ay[i-1]+ay[i+1])*dt
+        vz[i] = vz[i-1] + .5*(az[i-1]+az[i+1])*dt
+        
+    return vx,vy,vz
+
+def magnitude(vn,ve,vd):
+    '''
+     magnitude(): generates a magnitude for a given set of directional
+     components.
      
     '''
-    v = []
-    for i in range(len(vn)):
-        val = vn[i]**2 + ve[i]**2 + vd[i]**2
-        v.append(np.sqrt(val))
-    return v        
+    try: 
+        v = []
+        for i in range(len(vn)):
+            val = vn[i]**2 + ve[i]**2 + vd[i]**2
+            v.append(np.sqrt(val))
+        return v  
+    except TypeError: 
+        val = vn**2 + ve**2 + vd**2
+        v = np.sqrt(val)
+        return v    
 
 def generate_true_acc(vy,vx,vz,dt):
     '''
