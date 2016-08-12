@@ -86,9 +86,9 @@ def format_log(data_import, version):
     for i in range(len(data)):
         beta = data.ix[i, 'beta']
         if beta > 30:
-            data.ix[i,'beta'] = data.ix[i,'beta'] - 360;
+            data.ix[i,'beta'] = beta - 360;
         elif beta < -30:
-            data.ix[i,'beta'] = data.ix[i,'beta'] + 360;
+            data.ix[i,'beta'] = beta + 360;
     
     return data
         
