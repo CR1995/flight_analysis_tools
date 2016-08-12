@@ -164,6 +164,22 @@ def acc_to_vel_midpoint(ax,ay,az,vx0,vy0,vz0,dt,threshold):
         
     return vx,vy,vz
 
+def acc_to_vel_newton_cotes(ax,ay,az,vx0,vy0,vz0,time,threshold):
+    '''
+     acc_to_vel_midpoint(): takes in three lists of accelerations plus a constant timestep 
+     and returns three lists of velocities. Uses a midpoint integration scheme.
+    '''
+    
+    vx = [vx0 for i in range(len(ax) + 1)]
+    vy = [vy0 for i in range(len(ay) + 1)]
+    vz = [vz0 for i in range(len(az) + 1)]  
+
+    for i in range(1,len(ax)-1):
+        vx[i] = vx[i-1] + (ax[i-1] + ax[i])*.5*(time[i] - time[i-1])
+        vy[i] = vy[i-1] + (ay[i-1] + ay[i])*.5*(time[i] - time[i-1])
+        vz[i] = vz[i-1] + (az[i-1] + az[i])*.5*(time[i] - time[i-1])
+        
+    return vx,vy,vz
 def magnitude(vn,ve,vd):
     '''
      magnitude(): generates a magnitude for a given set of directional

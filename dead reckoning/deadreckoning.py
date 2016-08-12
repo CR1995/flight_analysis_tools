@@ -15,12 +15,6 @@ import drfuncs  as dr
 import matplotlib.pyplot as plt
 import numpy as np
 
-'''
- Select which flight regime you're looking at.
- 
-'''
-flight = 0
-land = 1 
 
 '''
  Import the log file 
@@ -33,8 +27,7 @@ delim   = ' ' ## The character that is used to deliminate the log file . Usually
 log = lt.import_table(logpath,logname,delim) ## Import the log file as a pandas table
 
 ## Depending on what envelope of flight we are looking at, pull only data we are interested in
-if flight: log = lt.isolate_flight(log) 
-elif land: log = lt.isolate_ap_modes(log,[8,9,10])
+log = lt.isolate_ap_modes(log,[9,10])
 
 ## Extract what we need from the pandas table into lists
 [time,p,q,r,xaccel,yaccel,zaccel,roll,pitch,yaw,maghdg] = dr.pull_att_data(log) 
@@ -67,7 +60,7 @@ order = 3
 ## Generate lists of the accelerations in each axis at each step in time
 ## by converting the body accelerations reported by the piccolo into
 ## inertial accelerations. 
-[ax,ay,az] = dr.acc_body_to_inertial(roll,pitch,yaw,xaccel,yaccel,zaccel)
+[ay,ax,az] = dr.acc_body_to_inertial(roll,pitch,yaw,xaccel,yaccel,zaccel)
 
 ## Use an offset to try and remove some bias from the recorded values.
 #[ax,ay,az] = dr.acc_bias_offset(ax,ay,az) 
@@ -76,11 +69,13 @@ order = 3
  Generate a list of velocities in each axis using the accelerations, and a known(?) timestep
 
 '''
-threshold = .1
+threshold = .2
 [ax, ay, az] = dr.acc_filter(ax, ay, az, threshold)
 
 ## Convert the accelerations into velocities. The NED velocities are the initial conditions.
-[vx, vy, vz] = dr.acc_to_vel_midpoint(ax, ay, az, veast[0], vnorth[0], vdown[0], timestep, 0)
+#[vx, vy, vz] = dr.acc_to_vel_newton_cotes([-i for i in ax], [-i for i in ay], [-i for i in az], veast[0], vnorth[0], vdown[0], time, 0)
+#[vx, vy, vz] = dr.acc_to_vel_midpoint([-i for i in ax], [-i for i in ay], [-i for i in az], veast[0], vnorth[0], vdown[0], timestep, 0)
+[vx, vy, vz] = dr.acc_to_vel_linear([-i for i in ax], [-i for i in ay], [-i for i in az], veast[0], vnorth[0], vdown[0], timestep, 0)
 
 ## Convert the directional velocities into velocity magnitudes
 dr_vel = dr.magnitude(vy,vx,vz)[:-10]
