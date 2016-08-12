@@ -15,7 +15,6 @@ data_import = pd.read_table('test.txt' ,sep=' ', header=0, skipinitialspace=True
 data = DataFrame(columns=['time', 'tas', 'velocity_north', 'velocity_east', 'velocity_down', 'beta', 'alpha', 'roll_rate', 'pitch_rate', 'yaw_rate', 'roll', 'pitch', 'yaw', 'a_x', 'a_y', 'a_z', 'alt_gps', 'alt_baro', 'agl', 'longitude', 'latitude', 'dynamic_pressure', 'static_pressure', 'density_air', 'oat', 'ap_mode', 'alt_ctrl', 'alt_track', 'x_track', 'y_track', 'z_track', 'velocity_track', 'surface_0', 'surface_1', 'surface_2', 'surface_3', 'surface_4', 'surface_5', 'surface_6', 'surface_7', 'surface_8', 'surface_9', 'surface_10', 'surface_11', 'surface_12', 'surface_13', 'surface_14', 'surface_15'])
 
 #unit converstions
-radtodeg = 57.2958
 mstos = .001
 
 #importing data fields and performing unit conversions 
@@ -24,21 +23,21 @@ data['tas'] = data_import['<TAS>[m/s]']
 data['velocity_north'] = data_import['<VNorth>[m/s]']
 data['velocity_east'] = data_import['<VEast>[m/s]']
 data['velocity_down'] = data_import['<VDown>[m/s]']
-data['alpha'] = data_import['<Pitch>[rad]']*radtodeg
-data['roll_rate'] = data_import['<P>[rad/s]']*radtodeg
-data['pitch_rate'] = data_import['<Q>[rad/s]']*radtodeg
-data['yaw_rate'] = data_import['<R>[rad/s]']*radtodeg
-data['roll'] = data_import['<Roll>[rad]']*radtodeg
-data['pitch'] = data_import['<Pitch>[rad]']*radtodeg
-data['yaw'] = data_import['<Yaw>[rad]']*radtodeg
+data['alpha'] = np.rad2deg(data_import['<Pitch>[rad]'])
+data['roll_rate'] = np.rad2deg(data_import['<P>[rad/s]'])
+data['pitch_rate'] = np.rad2deg(data_import['<Q>[rad/s]'])
+data['yaw_rate'] = np.rad2deg(data_import['<R>[rad/s]'])
+data['roll'] = np.rad2deg(data_import['<Roll>[rad]'])
+data['pitch'] = np.rad2deg(data_import['<Pitch>[rad]'])
+data['yaw'] = np.rad2deg(data_import['<Yaw>[rad]'])
 data['a_x'] = data_import['<Xaccel>[m/s/s]']
 data['a_y'] = data_import['<Yaccel>[m/s/s]']
 data['a_z'] = data_import['<Zaccel>[m/s/s]']
 data['alt_gps'] = data_import['<Height>[m]']
 data['alt_baro'] = data_import['<BaroAlt>[m]']
 data['agl'] = data_import['<AGL>[m]']
-data['longitude'] = data_import['<Lat>[rad]']*radtodeg
-data['latitude'] = data_import['<Lon>[rad]']*radtodeg
+data['longitude'] = np.rad2deg(data_import['<Lat>[rad]'])
+data['latitude'] = np.rad2deg(data_import['<Lon>[rad]'])
 data['dynamic_pressure'] = data_import['<Dynamic>[Pa]']
 data['static_pressure'] = data_import['<Static>[Pa]']
 data['oat'] = data_import['<OAT>[C]']
