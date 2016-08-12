@@ -73,7 +73,7 @@ data['density_air'] = data['static_pressure'] / (t * 287)
 
 #Rough beta approximation. Slip from the difference between heading and yaw 
 for i in range(len(data_import)):
-    data.ix[i,'beta'] = (data_import.ix[i,'<Direction>[rad]'] - data_import.ix[i,'<Yaw>[rad]']) * radtodeg
+    data.ix[i,'beta'] = np.rad2deg(data_import.ix[i,'<Direction>[rad]'] - data_import.ix[i,'<Yaw>[rad]'])
     if data.ix[i,'beta'] > 30:
         data.ix[i,'beta'] = data.ix[i,'beta'] - 360;
     elif data.ix[i,'beta'] < -30:
