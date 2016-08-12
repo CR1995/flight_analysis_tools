@@ -9,7 +9,7 @@ def format_log(data_import, version):
     
     from pandas import *
     import numpy as np
-   
+
     data = DataFrame(columns=['time', 'tas', 'velocity_north', 'velocity_east', 
                           'velocity_down', 'beta', 'alpha', 'roll_rate', 
                           'pitch_rate', 'yaw_rate', 'roll', 'pitch', 'yaw', 
@@ -20,7 +20,8 @@ def format_log(data_import, version):
                           'surface_1', 'surface_2', 'surface_3', 'surface_4', 'surface_5', 
                           'surface_6', 'surface_7', 'surface_8', 'surface_9', 'surface_10', 
                           'surface_11', 'surface_12', 'surface_13', 'surface_14', 'surface_15'])
-
+    
+    
     #unit converstions
     mstos = .001
     
@@ -41,7 +42,7 @@ def format_log(data_import, version):
     data['a_y'] = data_import['<Yaccel>[m/s/s]']
     data['a_z'] = data_import['<Zaccel>[m/s/s]']
     data['alt_gps'] = data_import['<Height>[m]']
-    data['alt_baro'] = data_import['<BaroAlt>[m]']
+    #data['alt_baro'] = data_import['<BaroAlt>[m]']
     data['agl'] = data_import['<AGL>[m]']
     data['longitude'] = np.rad2deg(data_import['<Lat>[rad]'])
     data['latitude'] = np.rad2deg(data_import['<Lon>[rad]'])
@@ -55,6 +56,7 @@ def format_log(data_import, version):
     data['y_track'] = data_import['<Track_Y>[m]']
     data['z_track'] = data_import['<Track_Z>[m]']
     data['velocity_track'] = data_import['<LoopTarget0>']
+ 
     
     #importing surface data from piccolo. Eventually write function to match surfaces data with surface name
     data['surface_0'] = data_import['<Surface0>']
@@ -74,20 +76,20 @@ def format_log(data_import, version):
     data['surface_14'] = data_import['<Surface14>']
     data['surface_15'] = data_import['<Surface15>']
     
+    
     #calculating air density using oat and static pressure data from piccolo
     t = data['oat'] + 273
     data['density_air'] = data['static_pressure'] / (t * 287)
     
-    #Rough beta approximation. Slip from the difference between heading and yaw 
-    for i in range(len(data_import)):
-        data.ix[i,'beta'] = np.rad2deg(data_import.ix[i,'<Direction>[rad]'] - data_import.ix[i,'<Yaw>[rad]'])
-        if data.ix[i,'beta'] > 30:
+    #Rough beta approximation. Slip from the difference between heading and yaw   
+    data['beta'] = np.rad2deg(data_import['<Direction>[rad]'] - data_import['<Yaw>[rad]'])
+    for i in range(len(data)):
+        beta = data.ix[i, 'beta']
+        if beta > 30:
             data.ix[i,'beta'] = data.ix[i,'beta'] - 360;
-        elif data.ix[i,'beta'] < -30:
+        elif beta < -30:
             data.ix[i,'beta'] = data.ix[i,'beta'] + 360;
-        else:
-            data.ix[i,'beta'] = data.ix[i,'beta'];
-        
+    
     return data
         
     
