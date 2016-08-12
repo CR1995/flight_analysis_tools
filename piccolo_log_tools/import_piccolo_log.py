@@ -10,9 +10,18 @@ import scipy as sp
 import pandas as pd
 import os
 
-data_import = pd.read_table('test.txt' ,sep=' ', header=0, skipinitialspace=True, low_memory=False)
+data_import = pd.read_table('log1.log' ,sep=' ', header=0, skipinitialspace=True, low_memory=False)
 
-data = DataFrame(columns=['time', 'tas', 'velocity_north', 'velocity_east', 'velocity_down', 'beta', 'alpha', 'roll_rate', 'pitch_rate', 'yaw_rate', 'roll', 'pitch', 'yaw', 'a_x', 'a_y', 'a_z', 'alt_gps', 'alt_baro', 'agl', 'longitude', 'latitude', 'dynamic_pressure', 'static_pressure', 'density_air', 'oat', 'ap_mode', 'alt_ctrl', 'alt_track', 'x_track', 'y_track', 'z_track', 'velocity_track', 'surface_0', 'surface_1', 'surface_2', 'surface_3', 'surface_4', 'surface_5', 'surface_6', 'surface_7', 'surface_8', 'surface_9', 'surface_10', 'surface_11', 'surface_12', 'surface_13', 'surface_14', 'surface_15'])
+data = DataFrame(columns=['time', 'tas', 'velocity_north', 'velocity_east', 
+                          'velocity_down', 'beta', 'alpha', 'roll_rate', 
+                          'pitch_rate', 'yaw_rate', 'roll', 'pitch', 'yaw', 
+                          'a_x', 'a_y', 'a_z', 'alt_gps', 'alt_baro', 'agl', 
+                          'longitude', 'latitude', 'dynamic_pressure', 'static_pressure', 
+                          'density_air', 'oat', 'ap_mode', 'alt_ctrl', 'alt_track', 
+                          'x_track', 'y_track', 'z_track', 'velocity_track', 'surface_0', 
+                          'surface_1', 'surface_2', 'surface_3', 'surface_4', 'surface_5', 
+                          'surface_6', 'surface_7', 'surface_8', 'surface_9', 'surface_10', 
+                          'surface_11', 'surface_12', 'surface_13', 'surface_14', 'surface_15'])
 
 #unit converstions
 mstos = .001
