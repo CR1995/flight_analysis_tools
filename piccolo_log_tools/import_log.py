@@ -2,13 +2,16 @@
 """
 Created on Fri Aug 12 14:31:09 2016
 
+Collection of functions used to import log files.
+
 @author: CR
 """
 
-def format_log(data_import, version):
-    
+def import_formatted_log(logpath, config, version):
     from pandas import *
     import numpy as np
+    
+    data_import = import_table(logpath, ' ')
 
     data = DataFrame(columns=['time', 'tas', 'velocity_north', 'velocity_east', 
                           'velocity_down', 'beta', 'alpha', 'roll_rate', 
@@ -91,5 +94,29 @@ def format_log(data_import, version):
             data.ix[i,'beta'] = beta + 360;
     
     return data
+    
+def import_table(path, delim):
+    ''' 
+     import_table(): imports a log file into a pandas table. Mostly just used to avoid
+     remembering all of the function arguments.
+    
+     It takes the log path, log name, and a delimeter as arguments. The path and the
+     filename have to be separated to avoid issues Python has with opening
+     strings formatted a certain way. For example, if the full path of your file is
+     'C:/Users/Chris/Desktop/nlog.log', then the 'n' at the beginning of the log name
+     will make python interpret the '\n' as a call for a new line, messing up the script.
+     
+     This is avoided by using os.path.join() to formulate the full path.
+    
+     This function will eventually incorporate the standard log conversion function James
+     is developing.
+    
+    '''
+    import pandas as pd    
+    import os
+    
+    fullpath = os.path.normpath(path) # Generate the full file path  
+    data = pd.read_table(fullpath, sep=delim, header=0, skipinitialspace=True, low_memory = False) # Generate a table with pandas
+    return data    
         
     
