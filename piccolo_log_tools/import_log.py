@@ -7,7 +7,7 @@ Collection of functions used to import log files.
 @author: CR
 """
 
-def import_formatted_log(logpath, config, version):
+def import_log(logpath, config, version):
     from pandas import *
     import numpy as np
     
