@@ -8,6 +8,12 @@ Library of flight mode isolation functions.
 @author: CR
 """
 
+def list_ap_modes(log):
+    '''
+     list_ap_modes(): print out a list of all the AP modes present in a log file
+    ''' 
+    return list(log.ap_mode.unique())
+    
 def isolate_ap_modes(log,modes):
     '''
      isolate_ap_modes(): returns a pandas table which only has data where AP_Mode is 
@@ -17,14 +23,14 @@ def isolate_ap_modes(log,modes):
      it can accept integers as well.
     '''
     try:    
-        for i in log['<AP_Mode>']:
+        for i in log['<ap_mode>']:
             if i not in modes:
-                log = log[log['<AP_Mode>'] != i]
+                log = log[log['<ap_mode>'] != i]
             
     except TypeError:
-        for i in log['<AP_Mode>']:
+        for i in log['<ap_mode>']:
             if i != modes:
-                log = log[log['<AP_Mode>'] != i]
+                log = log[log['<ap_mode>'] != i]
     
     return log
         
@@ -39,9 +45,9 @@ def strip_preflight(log):
     preflight_modes = [0,1]
     
     
-    for i in log['<AP_Mode>']:
+    for i in log['<ap_mode>']:
             if i in preflight_modes:
-                log = log[log['<AP_Mode>'] != i]
+                log = log[log['<ap_mode>'] != i]
 
     return log
 
@@ -56,9 +62,9 @@ def strip_postflight(log):
     '''    
     postflight_modes = [11,12,13,14]
     
-    for i in log['<AP_Mode>']:
+    for i in log['<ap_mode>']:
             if i in postflight_modes:
-                log = log[log['<AP_Mode>'] != i]
+                log = log[log['<ap_mode>'] != i]
         
     return log    
  
