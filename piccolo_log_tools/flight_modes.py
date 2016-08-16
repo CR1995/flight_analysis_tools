@@ -23,14 +23,14 @@ def isolate_ap_modes(log,modes):
      it can accept integers as well.
     '''
     try:    
-        for i in log['<ap_mode>']:
+        for i in log['ap_mode']:
             if i not in modes:
-                log = log[log['<ap_mode>'] != i]
+                log = log[log['ap_mode'] != i]
             
     except TypeError:
-        for i in log['<ap_mode>']:
+        for i in log['ap_mode ']:
             if i != modes:
-                log = log[log['<ap_mode>'] != i]
+                log = log[log['ap_mode'] != i]
     
     return log
         
@@ -42,12 +42,11 @@ def strip_preflight(log):
      
      Also useful for when you just don't want to see preflight data.
     '''
-    preflight_modes = [0,1]
+    preflight_modes = [0,1,2]
     
     
-    for i in log['<ap_mode>']:
-            if i in preflight_modes:
-                log = log[log['<ap_mode>'] != i]
+    for i in preflight_modes:
+        log = log[log.ap_mode != i]
 
     return log
 
@@ -62,19 +61,20 @@ def strip_postflight(log):
     '''    
     postflight_modes = [11,12,13,14]
     
-    for i in log['<ap_mode>']:
-            if i in postflight_modes:
-                log = log[log['<ap_mode>'] != i]
+    for i in postflight_modes:
+        log = log[log.ap_mode != i]
         
     return log    
  
 def isolate_flight(log):
     '''
-     isolate_flight(): implements the strip_preflight() and strip_postflight() functions into a single package. 
+     isolate_flight(): implements the strip_preflight() and strip_postflight() functions into a single package.
+     Doesn't call the functions themselves because that's really slow.
      
      Useful when only flight data is required.
     ''' 
     log = strip_preflight(log)
-    log = strip_postflight(log)
-    
-    return log
+    log = strip_postflight(log)  
+   
+        
+    return log    
