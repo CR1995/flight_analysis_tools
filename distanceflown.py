@@ -31,7 +31,7 @@ def haversine(lat1, lon1, lat2, lon2):
 
 dist = []
 time = []
-for i in range(log.index[0] + 1, len(log.latitude.index)):
+for i in range(log.index[0] + 1, log.index[-1]+1):
     lat1 = log.latitude[i-1]
     lat2 = log.latitude[i]
     lon1 = log.longitude[i-1]
