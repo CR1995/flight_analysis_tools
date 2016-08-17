@@ -16,21 +16,22 @@ def list_ap_modes(log):
     
 def isolate_ap_modes(log,modes):
     '''
-     isolate_ap_modes(): returns a pandas table which only has data where AP_Mode is 
-     the same as in what is in the 'modes' list. 
+     isolate_ap_modes(): returns a pandas table which only has data where ap_mode 
+     is the same as in what is in the 'modes' list. 
      
      'modes' should be a list, even if you're only lookng for a single value, but
      it can accept integers as well.
     '''
+    present_modes = list_ap_modes(log)    
+    
     try:    
-        for i in log['ap_mode']:
-            if i not in modes:
-                log = log[log['ap_mode'] != i]
-            
+        for i in modes:
+            present_modes.remove(i)
     except TypeError:
-        for i in log['ap_mode ']:
-            if i != modes:
-                log = log[log['ap_mode'] != i]
+        present_modes.remove(modes)
+    
+    for i in present_modes:
+        log = log[log.ap_mode != i]
     
     return log
         
