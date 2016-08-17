@@ -8,3 +8,4 @@ Created on Mon Aug 15 09:48:43 2016
 from import_log import *
 from smoothing import *
 from flight_modes import *
+from distance_flown import *
