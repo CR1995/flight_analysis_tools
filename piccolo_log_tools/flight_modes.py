@@ -10,7 +10,10 @@ Library of flight mode isolation functions.
 
 def list_ap_modes(log):
     '''
-     list_ap_modes(): print out a list of all the AP modes present in a log file
+     list_ap_modes(): print out a list of all the AP modes present in a log file.
+     
+     log.aap_mode.unique() returns a list of the unique values in the ap_mode
+     list
     ''' 
     return list(log.ap_mode.unique())
     

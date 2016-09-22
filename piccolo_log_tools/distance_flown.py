@@ -50,16 +50,22 @@ def distance_flown(log):
     '''    
     dist = []
     time = []
+    ### Loop through every datapoint in the log file
     for i in range(log.index[0] + 1, log.index[-1]+1):
         lat1 = log.latitude[i-1]
         lat2 = log.latitude[i]
         lon1 = log.longitude[i-1]
         lon2 = log.longitude[i]
         
+        ### Use the haversine function to calculate the distance between the
+        ### two lat and long points that the loop is currently working with
         dist.append(haversine(lat1,lon1,lat2,lon2))
         time.append(float(log.time[i]))
         
+    ### Sum up the list of incremental distances to create the total distance
+    ### (and convert to miles)
     dist = sum(dist) * .621371
+    ### Set the time elapsed as the last time entry in the log minus the first
     time = time[-1] - time[0]
     
     return dist, time

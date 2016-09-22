@@ -11,6 +11,8 @@ def import_log(logpath, config, version):
     from pandas import *
     import numpy as np
     
+    print 'This may take some time...'
+    
     data_import = import_table(logpath, ' ')
 
     data = DataFrame(columns=['time', 'tas', 'velocity_north', 'velocity_east', 
@@ -97,10 +99,11 @@ def import_log(logpath, config, version):
     
 def import_table(path, delim):
     ''' 
-     import_table(): imports a log file into a pandas table. Mostly just used to avoid
-     remembering all of the function arguments.
+     import_table(): imports a log file into a pandas table. Mostly just used 
+     to avoid remembering all of the function arguments, and to make scripts 
+     more visually appealing.
     
-     It takes the log path, log name, and a delimeter as arguments. The path and the
+     It takes the log path and a delimeter as arguments. The path and the
      filename have to be separated to avoid issues Python has with opening
      strings formatted a certain way. For example, if the full path of your file is
      'C:/Users/Chris/Desktop/nlog.log', then the 'n' at the beginning of the log name
