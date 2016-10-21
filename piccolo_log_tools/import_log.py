@@ -21,7 +21,7 @@ def import_log(logpath, config, version):
                           'a_x', 'a_y', 'a_z', 'alt_gps', 'alt_baro', 'agl', 
                           'longitude', 'latitude', 'dynamic_pressure', 'static_pressure', 
                           'density_air', 'oat', 'ap_mode', 'alt_ctrl', 'alt_track', 
-                          'x_track', 'y_track', 'z_track', 'velocity_track', 'surface_0', 
+                          'x_track', 'y_track', 'z_track', 'velocity_track', 'rpm', 'surface_0', 
                           'surface_1', 'surface_2', 'surface_3', 'surface_4', 'surface_5', 
                           'surface_6', 'surface_7', 'surface_8', 'surface_9', 'surface_10', 
                           'surface_11', 'surface_12', 'surface_13', 'surface_14', 'surface_15'])
@@ -61,6 +61,7 @@ def import_log(logpath, config, version):
     data['y_track'] = data_import['<Track_Y>[m]']
     data['z_track'] = data_import['<Track_Z>[m]']
     data['velocity_track'] = data_import['<LoopTarget0>']
+    data['rpm'] = data_import['<LeftRPM>']
  
     
     #importing surface data from piccolo. Eventually write function to match surfaces data with surface name

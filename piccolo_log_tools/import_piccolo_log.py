@@ -12,7 +12,7 @@ import os
 
 data_import = pd.read_table('log1.log' ,sep=' ', header=0, skipinitialspace=True, low_memory=False)
 
-data = DataFrame(columns=['time', 'tas', 'velocity_north', 'velocity_east', 
+data = DataFrame(columns=['time', 'tas', 'rpm', 'velocity_north', 'velocity_east', 
                           'velocity_down', 'beta', 'alpha', 'roll_rate', 
                           'pitch_rate', 'yaw_rate', 'roll', 'pitch', 'yaw', 
                           'a_x', 'a_y', 'a_z', 'alt_gps', 'alt_baro', 'agl', 
@@ -29,6 +29,7 @@ mstos = .001
 #importing data fields and performing unit conversions 
 data['time'] = (data_import['<Clock>[ms]'] - data_import.ix[0,'<Clock>[ms]']) * mstos
 data['tas'] = data_import['<TAS>[m/s]']
+data['rpm'] = data_import['<RPM>']
 data['velocity_north'] = data_import['<VNorth>[m/s]']
 data['velocity_east'] = data_import['<VEast>[m/s]']
 data['velocity_down'] = data_import['<VDown>[m/s]']
